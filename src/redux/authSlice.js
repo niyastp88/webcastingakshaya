@@ -21,6 +21,7 @@ const slice = createSlice({
   initialState: {
   token: localStorage.getItem("token") || null,
   error: null,
+  loading: false,
 },
   reducers: {
     logout: (state) => {
@@ -30,12 +31,20 @@ const slice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-  .addCase(loginAdmin.fulfilled, (state, action) => {
-    state.token = action.payload.token;
+    .addCase(loginAdmin.pending, (state) => {
+    state.loading = true;
     state.error = null;
   })
+  .addCase(loginAdmin.fulfilled, (state, action) => {
+    state.loading = false;
+    state.token = action.payload.token;
+    state.error = null;
+    
+  })
   .addCase(loginAdmin.rejected, (state, action) => {
+    state.loading = false;
     state.error = action.payload;
+    
   });
   },
 });

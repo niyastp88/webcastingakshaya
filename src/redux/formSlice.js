@@ -42,16 +42,26 @@ const slice = createSlice({
   initialState: {
   data: [],
   error: null,
+  loading: false,
 },
   reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(fetchForms.pending, (state) => {
+    state.loading = true;
+  })
     builder.addCase(fetchForms.fulfilled, (state, action) => {
+      state.loading = false;
       state.data = action.payload;
     })
+    builder.addCase(fetchForms.rejected, (state) => {
+    state.loading = false;
+  })
     builder.addCase(updateStatus.fulfilled, (state, action) => {
+      state.loading = false;
   state.data = state.data.filter(
     item => item._id !== action.payload.id
   );
+
 })
 builder
   .addCase(submitForm.fulfilled, (state) => {
@@ -59,6 +69,12 @@ builder
   })
   .addCase(submitForm.rejected, (state, action) => {
     state.error = action.payload;
+  })
+  .addCase(updateStatus.pending, (state) => {
+    state.loading = true;
+  })
+  .addCase(updateStatus.rejected, (state) => {
+    state.loading = false;
   });
   },
 });

@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { error } = useSelector((state) => state.auth);
+  const { error,loading } = useSelector((state) => state.auth);
 
   const [data, setData] = useState({ username: "", password: "" });
 
@@ -75,10 +75,10 @@ const handleSubmit = async (e) => {
 
           {/* Button */}
           <button
-            type="submit"
+            type="submit" disabled={loading}
             className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition duration-200"
           >
-            Login
+            {loading ? "Logging in..." : "Login"}
           </button>
 
         </form>

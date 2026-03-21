@@ -9,7 +9,7 @@ export default function Dashboard() {
 
 
   const dispatch = useDispatch();
-  const { data } = useSelector((state) => state.form);
+  const { data,loading } = useSelector((state) => state.form);
 
   const [tab, setTab] = useState("pending");
 
@@ -60,6 +60,11 @@ export default function Dashboard() {
             </button>
           ))}
         </div>
+        {loading && (
+    <div className="flex justify-center mb-3">
+      <div className="w-6 h-6 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+    </div>
+  )}
 
         {/* Table Container (Scrollable) */}
         <div className="bg-white rounded-xl shadow overflow-x-auto">
@@ -110,7 +115,7 @@ export default function Dashboard() {
                           className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-xs"
                           onClick={() =>
                             handleAction(item._id, "selected")
-                          }
+                          } disabled={loading}
                         >
                           Select
                         </button>
@@ -119,7 +124,7 @@ export default function Dashboard() {
                           className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs"
                           onClick={() =>
                             handleAction(item._id, "rejected")
-                          }
+                          } disabled={loading}
                         >
                           Reject
                         </button>
