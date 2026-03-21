@@ -27,7 +27,7 @@ export default function FormPage() {
   const res = await dispatch(submitForm(form));
 
   if (res.meta.requestStatus === "fulfilled") {
-    alert("Submitted successfully!");
+    alert("Your application has been submitted successfully. Akshaya team will contact you soon.");
 
     setForm({
       name: "",
@@ -180,14 +180,13 @@ export default function FormPage() {
 
           {/* Polling */}
           <label className="font-medium">
-            Polling Station <span className="text-red-500">*</span>
+            Polling Station 
           </label>
           <input
             type="text"
             name="pollingStation"
             value={form.pollingStation}
             onChange={handleChange}
-            required
             className="w-full p-2 border rounded mb-3"
           />
 
