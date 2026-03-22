@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API = "https://akshayawebcasting.onrender.com/api/admin";
+const API = "https://akshayawebcasting.vercel.app/api/admin";
 
 export const loginAdmin = createAsyncThunk(
   "auth/login",
