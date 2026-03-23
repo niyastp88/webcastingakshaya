@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API = "http://localhost:5000/api/forms";
+const API = "https://akshayawebcasting.vercel.app/api/forms";
 
 const getToken = () => localStorage.getItem("token");
 
