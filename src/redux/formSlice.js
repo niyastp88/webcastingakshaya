@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API = "https://akshayawebcasting.vercel.app/api/forms";
+const API = "http://localhost:5000/api/forms";
 
 const getToken = () => localStorage.getItem("token");
 
@@ -51,7 +51,7 @@ const slice = createSlice({
   })
     builder.addCase(fetchForms.fulfilled, (state, action) => {
       state.loading = false;
-      state.data = action.payload;
+      state.data = action.payload.data;
     })
     builder.addCase(fetchForms.rejected, (state) => {
     state.loading = false;

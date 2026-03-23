@@ -76,6 +76,8 @@ export default function Dashboard() {
                 <th className="p-2">Name</th>
                 <th className="p-2">Mobile</th>
                 <th className="p-2">Whatsapp</th>
+                <th className="p-2">Aadhar</th>
+                <th className="p-2">Election ID</th>
                 <th className="p-2">Panchayat</th>
                 <th className="p-2">Address</th>
                 <th className="p-2">Pincode</th>
@@ -96,6 +98,8 @@ export default function Dashboard() {
                   <td className="p-2">{item.name}</td>
                   <td className="p-2">{item.mobile}</td>
                   <td className="p-2">{item.whatsapp}</td>
+                  <td className="p-2">{item.aadhar}</td>
+                  <td className="p-2">{item.electionId}</td>
                   <td className="p-2">{item.panchayat}</td>
 
                   {/* Address handling */}
