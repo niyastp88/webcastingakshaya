@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API = "https://akshayawebcasting.vercel.app/api/admin";
+const API = import.meta.env.VITE_BACKEND_URL + "/api/admin";
 
 export const loginAdmin = createAsyncThunk(
   "auth/login",
@@ -13,16 +13,16 @@ export const loginAdmin = createAsyncThunk(
     } catch (err) {
       return rejectWithValue(err.response.data.message);
     }
-  }
+  },
 );
 
 const slice = createSlice({
   name: "auth",
   initialState: {
-  token: localStorage.getItem("token") || null,
-  error: null,
-  loading: false,
-},
+    token: localStorage.getItem("token") || null,
+    error: null,
+    loading: false,
+  },
   reducers: {
     logout: (state) => {
       state.token = null;
@@ -31,21 +31,19 @@ const slice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-    .addCase(loginAdmin.pending, (state) => {
-    state.loading = true;
-    state.error = null;
-  })
-  .addCase(loginAdmin.fulfilled, (state, action) => {
-    state.loading = false;
-    state.token = action.payload.token;
-    state.error = null;
-    
-  })
-  .addCase(loginAdmin.rejected, (state, action) => {
-    state.loading = false;
-    state.error = action.payload;
-    
-  });
+      .addCase(loginAdmin.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(loginAdmin.fulfilled, (state, action) => {
+        state.loading = false;
+        state.token = action.payload.token;
+        state.error = null;
+      })
+      .addCase(loginAdmin.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
   },
 });
 

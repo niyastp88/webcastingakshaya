@@ -5,44 +5,40 @@ import { logout } from "../redux/authSlice";
 import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
-    const navigate = useNavigate();
-
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
-  const { data,loading } = useSelector((state) => state.form);
+  const { data, loading } = useSelector((state) => state.form);
 
   const [tab, setTab] = useState("pending");
 
   useEffect(() => {
     dispatch(fetchForms(tab));
-  }, [tab]);
+  }, [tab,dispatch]);
 
   const handleAction = async (id, status) => {
     await dispatch(updateStatus({ id, status }));
     dispatch(fetchForms(tab));
   };
   const handleLogout = () => {
-  dispatch(logout());
-  navigate("/admin");
-};
+    dispatch(logout());
+    navigate("/admin");
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 p-4 sm:p-6">
-      
       {/* Header */}
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-4">
-  <h2 className="text-2xl sm:text-3xl font-bold">
-    Admin Dashboard
-  </h2>
+          <h2 className="text-2xl sm:text-3xl font-bold">Admin Dashboard</h2>
 
-  <button
-    onClick={handleLogout}
-    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm"
-  >
-    Logout
-  </button>
-</div>
+          <button
+            onClick={handleLogout}
+            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm"
+          >
+            Logout
+          </button>
+        </div>
 
         {/* Tabs */}
         <div className="flex gap-2 mb-4 flex-wrap">
@@ -61,15 +57,14 @@ export default function Dashboard() {
           ))}
         </div>
         {loading && (
-    <div className="flex justify-center mb-3">
-      <div className="w-6 h-6 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-    </div>
-  )}
+          <div className="flex justify-center mb-3">
+            <div className="w-6 h-6 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+          </div>
+        )}
 
         {/* Table Container (Scrollable) */}
         <div className="bg-white rounded-xl shadow overflow-x-auto">
           <table className="min-w-[900px] w-full text-sm text-left">
-            
             {/* Head */}
             <thead className="bg-gray-200">
               <tr>
@@ -84,17 +79,16 @@ export default function Dashboard() {
                 <th className="p-2">Polling</th>
                 <th className="p-2">Laptop</th>
                 <th className="p-2">Webcam</th>
-                {tab === "pending" && <th className="p-2">Action</th>}
+                {["pending", "selected", "rejected"].includes(tab) && (
+  <th className="p-2">Action</th>
+)}
               </tr>
             </thead>
 
             {/* Body */}
             <tbody>
               {data.map((item) => (
-                <tr
-                  key={item._id}
-                  className="border-b hover:bg-gray-50"
-                >
+                <tr key={item._id} className="border-b hover:bg-gray-50">
                   <td className="p-2">{item.name}</td>
                   <td className="p-2">{item.mobile}</td>
                   <td className="p-2">{item.whatsapp}</td>
@@ -112,29 +106,56 @@ export default function Dashboard() {
                   <td className="p-2">{item.laptop}</td>
                   <td className="p-2">{item.webcam}</td>
 
-                  {tab === "pending" && (
-                    <td className="p-2">
-                      <div className="flex gap-2">
-                        <button
-                          className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-xs"
-                          onClick={() =>
-                            handleAction(item._id, "selected")
-                          } disabled={loading}
-                        >
-                          Select
-                        </button>
+                  {["pending", "selected", "rejected"].includes(tab) && (
+  <td className="p-2">
+    <div className="flex gap-2">
 
-                        <button
-                          className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs"
-                          onClick={() =>
-                            handleAction(item._id, "rejected")
-                          } disabled={loading}
-                        >
-                          Reject
-                        </button>
-                      </div>
-                    </td>
-                  )}
+      {/* PENDING */}
+      {tab === "pending" && (
+        <>
+          <button
+            className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-xs"
+            onClick={() => handleAction(item._id, "selected")}
+            disabled={loading}
+          >
+            Select
+          </button>
+
+          <button
+            className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs"
+            onClick={() => handleAction(item._id, "rejected")}
+            disabled={loading}
+          >
+            Reject
+          </button>
+        </>
+      )}
+
+      {/* SELECTED */}
+      {tab === "selected" && (
+        <button
+          className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs"
+          onClick={() => handleAction(item._id, "rejected")}
+          disabled={loading}
+        >
+          Reject
+        </button>
+      )}
+
+      {/* REJECTED */}
+      {tab === "rejected" && (
+        <button
+          className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-xs"
+          onClick={() => handleAction(item._id, "selected")}
+          disabled={loading}
+        >
+          Select
+        </button>
+      )}
+
+    </div>
+  </td>
+)}
                 </tr>
               ))}
 
@@ -147,7 +168,6 @@ export default function Dashboard() {
                 </tr>
               )}
             </tbody>
-
           </table>
         </div>
       </div>

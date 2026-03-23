@@ -2,10 +2,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { submitForm } from "../redux/formSlice";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export default function FormPage() {
   const dispatch = useDispatch();
-  const { error } = useSelector((state) => state.form);
+  const { error, loading } = useSelector((state) => state.form);
 
   const [form, setForm] = useState({
     name: "",
@@ -18,32 +19,50 @@ export default function FormPage() {
     laptop: "",
     webcam: "",
     aadhar: "",
-      electionId: "",
+    electionId: "",
   });
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const res = await dispatch(submitForm(form));
+    const res = await dispatch(submitForm(form));
 
-  if (res.meta.requestStatus === "fulfilled") {
-    alert("Your application has been submitted successfully. Akshaya team will contact you soon.");
+    if (res.meta.requestStatus === "fulfilled") {
+      //   clear form
+      setForm({
+        name: "",
+        mobile: "",
+        whatsapp: "",
+        aadhar: "",
+        electionId: "",
+        panchayat: "",
+        address: "",
+        pincode: "",
+        pollingStation: "",
+        laptop: "",
+        webcam: "",
+      });
 
-    setForm({
-      name: "",
-      mobile: "",
-      whatsapp: "",
-      aadhar: "",
-      electionId: "",
-      panchayat: "",
-      address: "",
-      pincode: "",
-      pollingStation: "",
-      laptop: "",
-      webcam: "",
-    });
-  }
-};
+      //  show message
+
+      toast.success(
+        "Submitted successfully! Akshaya team will contact you soon.",
+        {
+          duration: 3000,
+          style: {
+            borderRadius: "10px",
+            background: "#16a34a",
+            color: "#fff",
+            fontWeight: "500",
+          },
+          iconTheme: {
+            primary: "#fff",
+            secondary: "#16a34a",
+          },
+        },
+      );
+    }
+  };
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -51,11 +70,21 @@ export default function FormPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-400 to-blue-600">
+      {loading && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-xl shadow-lg flex flex-col items-center">
+            <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-3"></div>
+            <p className="text-gray-700 font-medium">
+              Submitting... Please wait
+            </p>
+          </div>
+        </div>
+      )}
 
-      {/* 🔹 Header */}
+      {/*  Header */}
       <div className="flex justify-between items-center p-4 max-w-5xl mx-auto">
         <h1 className="text-white text-lg sm:text-xl font-semibold">
-          Akshaya Portal
+          Akshaya Web Casting Portal
         </h1>
 
         <Link to="/admin">
@@ -65,7 +94,7 @@ export default function FormPage() {
         </Link>
       </div>
 
-      {/* 🔹 Form */}
+      {/*  Form */}
       <div className="flex items-center justify-center p-4">
         <form
           onSubmit={handleSubmit}
@@ -101,30 +130,30 @@ export default function FormPage() {
             className="w-full p-2 border rounded mb-3"
           />
           {/* Aadhaar */}
-<label className="font-medium">
-  Aadhaar Number <span className="text-red-500">*</span>
-</label>
-<input
-  type="text"
-  name="aadhar"
-  value={form.aadhar}
-  onChange={handleChange}
-  required
-  className="w-full p-2 border rounded mb-3"
-/>
+          <label className="font-medium">
+            Aadhaar Number <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
+            name="aadhar"
+            value={form.aadhar}
+            onChange={handleChange}
+            required
+            className="w-full p-2 border rounded mb-3"
+          />
 
-{/* Election ID */}
-<label className="font-medium">
-  Election ID <span className="text-red-500">*</span>
-</label>
-<input
-  type="text"
-  name="electionId"
-  value={form.electionId}
-  onChange={handleChange}
-  required
-  className="w-full p-2 border rounded mb-3"
-/>
+          {/* Election ID */}
+          <label className="font-medium">
+            Election ID <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
+            name="electionId"
+            value={form.electionId}
+            onChange={handleChange}
+            required
+            className="w-full p-2 border rounded mb-3"
+          />
 
           {/* Whatsapp */}
           <label className="font-medium">
@@ -179,9 +208,7 @@ export default function FormPage() {
           />
 
           {/* Polling */}
-          <label className="font-medium">
-            Polling Station 
-          </label>
+          <label className="font-medium">Polling Station</label>
           <input
             type="text"
             name="pollingStation"
@@ -247,11 +274,7 @@ export default function FormPage() {
               No
             </label>
           </div>
-          {error && (
-  <p className="text-red-500 text-sm mb-3">
-    {error}
-  </p>
-)}
+          {error && <p className="text-red-500 text-sm mb-3">{error}</p>}
 
           {/* Submit */}
           <button
